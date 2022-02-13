@@ -15,6 +15,8 @@ namespace moonlight_xbox_dx {
 		extern bool showStats;
 		extern float outputW;
 		extern float outputH;
+		extern float comScaleX;
+		extern float comScaleY;
 		extern StreamingStats stats;
 		Platform::String^ StringPrintf(const char* fmt, ...);
 

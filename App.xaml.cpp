@@ -85,6 +85,8 @@ void App::OnLaunched(Windows::ApplicationModel::Activation::LaunchActivatedEvent
 	state->Init().then([that](){
 		that->m_menuPage->OnStateLoaded();
 	});
+	//Remove Layout Scaling to prevent problems with swapchain
+	Windows::UI::ViewManagement::ApplicationViewScaling::TrySetDisableLayoutScaling(true);
 	
 }
 /// <summary>

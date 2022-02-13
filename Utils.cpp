@@ -10,6 +10,8 @@ namespace moonlight_xbox_dx {
 		bool showStats = false;
 		float outputW = 0;
 		float outputH = 0;
+		float comScaleX = 0;
+		float comScaleY = 0;
 		StreamingStats stats;
 
 		Platform::String^ StringPrintf(const char* fmt, ...) {

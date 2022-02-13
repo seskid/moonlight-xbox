@@ -229,16 +229,12 @@ void DX::DeviceResources::CreateWindowSizeDependentResources()
 	//Get the correct screen resolution and adapt the swapchain to 16:9 aspect ratio
 	float normalizedWidth = uwp_get_width();
 	float normalizedHeight = uwp_get_height();
-	if (normalizedHeight >= (normalizedWidth / 16.0f * 9.0f)) {
-		normalizedHeight = (normalizedWidth / 16.0f * 9.0f);
-	}
-	else {
-		normalizedWidth = normalizedHeight / 9.0f * 16.0f;
-	}
 	m_d3dRenderTargetSize.Width = normalizedWidth;
 	m_d3dRenderTargetSize.Height = normalizedHeight;
 	moonlight_xbox_dx::Utils::outputW = m_d3dRenderTargetSize.Width;
 	moonlight_xbox_dx::Utils::outputH = m_d3dRenderTargetSize.Height;
+	moonlight_xbox_dx::Utils::comScaleX = m_compositionScaleX;
+	moonlight_xbox_dx::Utils::comScaleY = m_compositionScaleY;
 	if (m_swapChain != nullptr)
 	{
 		// If the swap chain already exists, resize it.
@@ -375,19 +371,6 @@ void DX::DeviceResources::CreateWindowSizeDependentResources()
 
 	DX::ThrowIfFailed(
 		m_swapChain->SetRotation(displayRotation)
-		);
-
-	// Setup inverse scale on the swap chain
-	DXGI_MATRIX_3X2_F inverseScale = { 0 };
-	inverseScale._11 = 1.0f / m_effectiveCompositionScaleX;
-	inverseScale._22 = 1.0f / m_effectiveCompositionScaleY;
-	ComPtr<IDXGISwapChain2> spSwapChain2;
-	DX::ThrowIfFailed(
-		m_swapChain.As<IDXGISwapChain2>(&spSwapChain2)
-		);
-
-	DX::ThrowIfFailed(
-		spSwapChain2->SetMatrixTransform(&inverseScale)
 		);
 
 	// Create a render target view of the swap chain back buffer.
@@ -730,7 +713,7 @@ int DX::DeviceResources::uwp_get_height()
 			return Windows::Graphics::Display::Core::HdmiDisplayInformation::GetForCurrentView()->GetCurrentDisplayMode()->ResolutionHeightInRawPixels;
 	}
 	const LONG32 resolution_scale = static_cast<LONG32>(Windows::Graphics::Display::DisplayInformation::GetForCurrentView()->ResolutionScale);
-	auto surface_scale = static_cast<float>(resolution_scale) / 100.0f;
+	auto surface_scale = /*static_cast<float>(resolution_scale) / 100.0f*/ 1.0f;
 	return static_cast<LONG32>(CoreWindow::GetForCurrentThread()->Bounds.Height * surface_scale);
 }
 
@@ -743,6 +726,6 @@ int DX::DeviceResources::uwp_get_width()
 			return Windows::Graphics::Display::Core::HdmiDisplayInformation::GetForCurrentView()->GetCurrentDisplayMode()->ResolutionWidthInRawPixels;
 	}
 	const LONG32 resolution_scale = static_cast<LONG32>(Windows::Graphics::Display::DisplayInformation::GetForCurrentView()->ResolutionScale);
-	auto surface_scale = static_cast<float>(resolution_scale) / 100.0f;
+	auto surface_scale = /*static_cast<float>(resolution_scale) / 100.0f*/ 1.0f;
 	return static_cast<LONG32>(CoreWindow::GetForCurrentThread()->Bounds.Width * surface_scale);
 }
