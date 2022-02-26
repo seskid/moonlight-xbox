@@ -7,16 +7,26 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
-    <StackPanel Padding="8,16,8,8">
-        <Button Margin="0 0 0 16" Name="backButton" Click="backButton_Click">
+    <Page.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="32"></Setter>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="32"></Setter>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="FontSize" Value="32"></Setter>
+        </Style>
+    </Page.Resources>
+            <StackPanel Padding="8,16,8,8">
+                <Button Margin="0 0 0 16" Name="backButton" Click="backButton_Click">
             <Button.Content>
                 <SymbolIcon Symbol="Back" />
             </Button.Content>
         </Button>
-        <Grid RowSpacing="8">
+        <Grid RowSpacing="24">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200"></ColumnDefinition>
+                <ColumnDefinition Width="400"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>

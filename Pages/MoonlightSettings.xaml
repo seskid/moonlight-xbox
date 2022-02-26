@@ -7,6 +7,17 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="32"></Setter>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="32"></Setter>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="FontSize" Value="32"></Setter>
+        </Style>
+    </Page.Resources>
     <StackPanel Padding="32,64,32,32" Margin="{x:Bind State.ScreenMargin,Mode=OneWay}" BorderBrush="Green" BorderThickness="2">
         <Button Margin="0 0 0 16" Name="backButton" Click="backButton_Click">
             <Button.Content>

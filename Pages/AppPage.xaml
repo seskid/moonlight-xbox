@@ -11,12 +11,12 @@
     >
     <FlyoutBase.AttachedFlyout>
         <MenuFlyout x:Name="ActionsFlyout" AllowFocusOnInteraction="false" Placement="TopEdgeAlignedRight">
-            <MenuFlyoutItem x:Name="resumeAppButton" Click="resumeAppButton_Click" Text="Resume App" AllowFocusOnInteraction="false" FocusVisualSecondaryThickness="0.5" >
+            <MenuFlyoutItem x:Name="resumeAppButton" Click="resumeAppButton_Click" Text="Resume App" AllowFocusOnInteraction="false" FocusVisualSecondaryThickness="0.5" FontSize="24" >
                 <MenuFlyoutItem.Icon>
                     <SymbolIcon Symbol="Play" />
                 </MenuFlyoutItem.Icon>
             </MenuFlyoutItem>
-            <MenuFlyoutItem x:Name="closeAppButton"  Click="closeAppButton_Click"  Text="Close App" AllowFocusOnInteraction="false" FocusVisualSecondaryThickness="0.5" >
+            <MenuFlyoutItem x:Name="closeAppButton"  Click="closeAppButton_Click"  Text="Close App" AllowFocusOnInteraction="false" FocusVisualSecondaryThickness="0.5" FontSize="24" >
                 <MenuFlyoutItem.Icon>
                     <SymbolIcon Symbol="Stop" />
                 </MenuFlyoutItem.Icon>
@@ -29,19 +29,23 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="64" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" VerticalAlignment="Center" Padding="0,0,0,8" >
+        <Grid Grid.Row="0" VerticalAlignment="Center" Padding="0,0,0,16" >
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Padding="8">
-                <Button TabIndex="3" x:Name="backButton" Click="backButton_Click">
+                <Button TabIndex="3" x:Name="backButton" Click="backButton_Click" Height="80" Width="80">
                     <Button.Content>
-                        <SymbolIcon Symbol="Back" />
+                        <Viewbox MaxHeight="32" MaxWidth="32">
+                            <SymbolIcon Symbol="Back" />
+                        </Viewbox>
                     </Button.Content>
                 </Button>
-                <TextBlock VerticalAlignment="Center" Padding="8" FontSize="20" Text="{x:Bind Host.LastHostname}"></TextBlock>
+                <TextBlock VerticalAlignment="Center" Padding="8" FontSize="40" Text="{x:Bind Host.LastHostname}"></TextBlock>
             </StackPanel>
             <StackPanel  Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="8" Orientation="Horizontal" Spacing="16">
-                <Button TabIndex="2" x:Name="settingsButton" Click="settingsButton_Click">
+                <Button TabIndex="2" x:Name="settingsButton" Click="settingsButton_Click" Height="80" Width="80">
                     <Button.Content>
-                        <SymbolIcon Symbol="Setting" />
+                        <Viewbox MaxWidth="32" MaxHeight="32">
+                            <SymbolIcon Symbol="Setting" />
+                        </Viewbox>
                     </Button.Content>
                 </Button>
             </StackPanel>
@@ -58,16 +62,16 @@
                 <DataTemplate x:DataType="local:MoonlightApp" x:DefaultBindMode="OneWay">
                     <StackPanel>
                         <StackPanel Padding="16" VerticalAlignment="Center">
-                            <Canvas Width="216" Height="216">
-                                <Image Source="ms-appx:///Assets/gamepad.svg" Width="200" Height="200" Canvas.Left="16" Canvas.Top="16" />
-                                <Image Source="ms-appx:///Assets/play.svg" Visibility="{x:Bind CurrentlyRunning}" Width="96" Height="96" Canvas.Left="125" Canvas.Top="125" />
+                            <Canvas Width="432" Height="432">
+                                <Image Source="ms-appx:///Assets/gamepad.svg" Width="400" Height="400" Canvas.Left="32" Canvas.Top="32" />
+                                <Image Source="ms-appx:///Assets/play.svg" Visibility="{x:Bind CurrentlyRunning}" Width="192" Height="192" Canvas.Left="250" Canvas.Top="250" />
                             </Canvas>
-                            <TextBlock Text="{x:Bind Name}"></TextBlock>
+                            <TextBlock Text="{x:Bind Name}" FontSize="32"></TextBlock>
                         </StackPanel>
                     </StackPanel>
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>
-        <TextBlock Grid.Row="2" TextAlignment="Center">Did you know? You can press Menu + View to show the options during streaming</TextBlock>
+        <TextBlock Grid.Row="2" TextAlignment="Center" FontSize="32">Did you know? You can press Menu + View to show the options during streaming</TextBlock>
     </Grid>
 </Page>

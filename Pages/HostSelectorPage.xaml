@@ -11,12 +11,18 @@
     >
     <FlyoutBase.AttachedFlyout>
         <MenuFlyout x:Name="ActionsFlyout" AllowFocusOnInteraction="false" Placement="TopEdgeAlignedRight">
-            <MenuFlyoutItem x:Name="hostSettingsButton" Click="hostSettingsButton_Click" Text="Host Settings" AllowFocusOnInteraction="false" FocusVisualSecondaryThickness="0.5" >
+            <MenuFlyout.MenuFlyoutPresenterStyle>
+                <Style TargetType="MenuFlyoutPresenter">
+                    <Setter Property="FontSize" Value="32" />
+                    <Setter Property="MaxWidth" Value="350"/>
+                </Style>
+            </MenuFlyout.MenuFlyoutPresenterStyle>
+            <MenuFlyoutItem x:Name="hostSettingsButton" Click="hostSettingsButton_Click" Text="Host Settings" AllowFocusOnInteraction="false" FocusVisualSecondaryThickness="0.5" FontSize="24" >
                 <MenuFlyoutItem.Icon>
                     <SymbolIcon Symbol="Setting" />
                 </MenuFlyoutItem.Icon>
             </MenuFlyoutItem>
-            <MenuFlyoutItem x:Name="removeHostButton" Click="removeHostButton_Click" Text="Remove Host" AllowFocusOnInteraction="false" FocusVisualSecondaryThickness="0.5" >
+            <MenuFlyoutItem x:Name="removeHostButton" Click="removeHostButton_Click" Text="Remove Host" AllowFocusOnInteraction="false" FocusVisualSecondaryThickness="0.5" FontSize="24" >
                 <MenuFlyoutItem.Icon>
                     <SymbolIcon Symbol="Remove" />
                 </MenuFlyoutItem.Icon>
@@ -34,18 +40,22 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Padding="8">
-                <Image Source="ms-appx:///Assets/StoreLogo.scale-200.png" Width="48" Height="48"></Image>
-                <TextBlock VerticalAlignment="Center" Padding="8" FontSize="20">Moonlight</TextBlock>
+                <Image Source="ms-appx:///Assets/StoreLogo.scale-200.png" Width="96" Height="96"></Image>
+                <TextBlock VerticalAlignment="Center" Padding="16" FontSize="40">Moonlight</TextBlock>
             </StackPanel>
             <StackPanel  Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="8" Orientation="Horizontal" Spacing="16">
-                <Button Click="NewHostButton_Click" TabIndex="2">
+                <Button Click="NewHostButton_Click" TabIndex="2" Height="80" Width="80">
                     <Button.Content>
-                        <SymbolIcon Symbol="Add" />
+                        <Viewbox MaxHeight="32" MaxWidth="32">
+                            <SymbolIcon Symbol="Add"/>
+                        </Viewbox>
                     </Button.Content>
                 </Button>
-                <Button Name="SettingsButton" TabIndex="3" Click="SettingsButton_Click">
+                <Button Name="SettingsButton" TabIndex="3" Click="SettingsButton_Click"  Height="80" Width="80">
                     <Button.Content>
-                        <SymbolIcon Symbol="Setting" />
+                        <Viewbox MaxHeight="32" MaxWidth="32">
+                            <SymbolIcon Symbol="Setting"/>
+                        </Viewbox>
                     </Button.Content>
                 </Button>
             </StackPanel>
@@ -62,12 +72,12 @@
                 <DataTemplate x:DataType="local:MoonlightHost" x:DefaultBindMode="OneWay">
                     <StackPanel>
                         <StackPanel Padding="16" VerticalAlignment="Center">
-                            <Canvas Width="216" Height="216">
-                                <Image Source="ms-appx:///Assets/desktop.svg" Width="200" Height="200" Canvas.Left="16" Canvas.Top="16" />
-                                <Image Source="ms-appx:///Assets/lock.svg" Visibility="{x:Bind NotPaired}" Width="96" Height="96" Canvas.Left="70" Canvas.Top="50" />
-                                <Image Source="ms-appx:///Assets/disconnected.svg" Visibility="{x:Bind NotConnected}" Width="96" Height="96" Canvas.Left="70" Canvas.Top="50" />
+                            <Canvas Width="432" Height="432">
+                                <Image Source="ms-appx:///Assets/desktop.svg" Width="400" Height="400" Canvas.Left="32" Canvas.Top="32" />
+                                <Image Source="ms-appx:///Assets/lock.svg" Visibility="{x:Bind NotPaired}" Width="192" Height="192" Canvas.Left="140" Canvas.Top="140" />
+                                <Image Source="ms-appx:///Assets/disconnected.svg" Visibility="{x:Bind NotConnected}" Width="192" Height="192" Canvas.Left="140" Canvas.Top="100" />
                             </Canvas>
-                            <TextBlock Text="{x:Bind LastHostname}"></TextBlock>
+                            <TextBlock Text="{x:Bind LastHostname}" FontSize="32"></TextBlock>
                         </StackPanel>
                         <ProgressBar IsIndeterminate="True" Visibility="{x:Bind Loading}"></ProgressBar>
                     </StackPanel>
