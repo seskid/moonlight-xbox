@@ -135,8 +135,8 @@
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x64</AppxBundlePlatforms>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
-    <AppxPackageDir>D:\Progetti\moonlight-xbox-dx\AppPackages\moonlight-xbox-dx\</AppxPackageDir>
-    <PackageCertificateThumbprint>FB25C3C435AB22F2CFC6F0C76561B7155A5D9B05</PackageCertificateThumbprint>
+    <AppxPackageDir>C:\Users\seski\Source\Repos\moonlight-xbox\</AppxPackageDir>
+    <PackageCertificateThumbprint>6BF1FEF898F81A4CE44EEA1E758F5EFC2652ADB7</PackageCertificateThumbprint>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <Link>

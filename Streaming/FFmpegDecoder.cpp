@@ -23,6 +23,11 @@ namespace moonlight_xbox_dx {
 	}
 	
 	int FFMpegDecoder::Init(int videoFormat, int width, int height, int redrawRate, void* context, int drFlags) {
+
+ 
+			char message1[4086];
+				sprintf(message1,"What is the video format %d",videoFormat);
+				
 #if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58,10,100)
         avcodec_register_all();
 #endif
@@ -34,10 +39,17 @@ namespace moonlight_xbox_dx {
         switch (videoFormat) {
         case VIDEO_FORMAT_H264:
             decoder = avcodec_find_decoder_by_name("h264");
+			char message1[4086];
+				sprintf(message1,"Using H264");
+				
+
 			Utils::Log("Using H264\n");
             break;
         case VIDEO_FORMAT_H265:
             decoder = avcodec_find_decoder_by_name("hevc");
+			char message2[4096];
+				sprintf(message2,"Using HEVC");
+
 			Utils::Log("Using HEVC\n");
             break;
         }
@@ -233,6 +245,19 @@ namespace moonlight_xbox_dx {
 	}
 	
 	int initCallback(int videoFormat, int width, int height, int redrawRate, void* context, int drFlags) {
+      char videoFormatVal[4096];
+	  sprintf(videoFormatVal,"Video format is : %d\n",videoFormat);
+	Utils::Log(videoFormatVal);
+	char widthVal[4096];
+	sprintf(widthVal,"FFmpegwidth is : %d\n",width);
+	Utils::Log(widthVal);
+	char heightVal[4096];
+	sprintf(heightVal, "FFmegheight is : %d\n",height);
+	Utils::Log(heightVal);
+
+
+// log these values for testing
+
 		return instance->Init(videoFormat, width, height, redrawRate, context, drFlags);
 	}
 	void startCallback() {

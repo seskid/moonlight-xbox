@@ -66,6 +66,11 @@ Concurrency::task<void> moonlight_xbox_dx::ApplicationState::UpdateFile()
 }
 
 void moonlight_xbox_dx::ApplicationState::RemoveHost(MoonlightHost^ host) {
+
+	char message[2048];
+	sprintf(message, "Removed Host Clicked\n");
+	Utils::Log(message);
+
 	if (host == nullptr)return;
 	unsigned int index;
 	bool found = SavedHosts->IndexOf(host, &index);

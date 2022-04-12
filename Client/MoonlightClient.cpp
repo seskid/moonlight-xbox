@@ -36,6 +36,14 @@ int MoonlightClient::StartStreaming(std::shared_ptr<DX::DeviceResources> res,Str
 	const char* charStr = fooA.c_str();
 	this->Connect(charStr);
 	STREAM_CONFIGURATION config;
+
+	 char message1[4096];
+		sprintf(message1, "Host Resolution height : %d \n", sConfig->height);
+		Utils::Log(message1);
+
+		 char message2[4096];
+		sprintf(message2, "Host Resolution width : %d \n", sConfig->width);
+		Utils::Log(message2);
 	config.width = sConfig->width;
 	config.height = sConfig->height;
 	config.bitrate = sConfig->bitrate;
@@ -51,7 +59,7 @@ int MoonlightClient::StartStreaming(std::shared_ptr<DX::DeviceResources> res,Str
 	if (sConfig->audioConfig == "Surround 7.1") {
 		config.audioConfiguration = AUDIO_CONFIGURATION_71_SURROUND;
 	}
-	config.supportsHevc = false;
+	config.supportsHevc = true;
 	config.streamingRemotely = STREAM_CFG_AUTO;
 	char message[2048];
 	sprintf(message, "Inserted App ID %d\n", sConfig->appID);

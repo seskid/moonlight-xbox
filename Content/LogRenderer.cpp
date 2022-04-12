@@ -118,7 +118,7 @@ void LogRenderer::Render()
 void LogRenderer::CreateDeviceDependentResources()
 {
 	DX::ThrowIfFailed(
-		m_deviceResources->GetD2DDeviceContext()->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Yellow), &m_whiteBrush)
+		m_deviceResources->GetD2DDeviceContext()->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_whiteBrush)
 		);
 }
 void LogRenderer::ReleaseDeviceDependentResources()
