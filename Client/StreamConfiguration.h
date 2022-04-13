@@ -8,5 +8,6 @@ public:
 	property int height;
 	property int bitrate;
 	property int FPS;
+	property bool supportsHevc;
     property Platform::String^ audioConfig;
 };

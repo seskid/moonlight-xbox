@@ -18,7 +18,7 @@ moonlight_xbox_dxMain::moonlight_xbox_dxMain(const std::shared_ptr<DX::DeviceRes
 	// Register to be notified if the Device is lost or recreated
 	m_deviceResources->RegisterDeviceNotify(this);
 
-	m_sceneRenderer = std::unique_ptr<VideoRenderer>(new VideoRenderer(m_deviceResources,moonlightClient,configuration));
+	m_sceneRenderer = std::unique_ptr<VideoRenderer>(new (m_deviceResources,moonlightClient,configuration));
 
 	m_fpsTextRenderer = std::unique_ptr<LogRenderer>(new LogRenderer(m_deviceResources));
 
