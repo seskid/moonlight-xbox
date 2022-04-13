@@ -52,7 +52,7 @@ int MoonlightClient::StartStreaming(std::shared_ptr<DX::DeviceResources> res,Str
 	config.encryptionFlags = 0;
 	config.fps = sConfig->FPS;
 	config.packetSize = 1024;
-	config.supportsHevc = 
+	config.supportsHevc = ? VIDEO_FORMAT_H265 : VIDEO_FORMAT_H264;
 	config.audioConfiguration = AUDIO_CONFIGURATION_STEREO;
 	if (sConfig->audioConfig == "Surround 5.1") {
 		config.audioConfiguration = AUDIO_CONFIGURATION_51_SURROUND;
