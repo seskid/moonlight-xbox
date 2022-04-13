@@ -8,5 +8,5 @@ public:
 	property int height;
 	property int bitrate;
 	property int FPS;
-	property Platform::String^ audioConfig;
+    property Platform::String^ audioConfig;
 };

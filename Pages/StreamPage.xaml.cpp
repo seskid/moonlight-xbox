@@ -39,7 +39,7 @@ StreamPage::StreamPage():
 		ref new SizeChangedEventHandler(this, &StreamPage::OnSwapChainPanelSizeChanged);
 
 	//Resize to make fullscreen on Xbox
-	//Windows::UI::ViewManagement::ApplicationView::GetForCurrentView()->SetDesiredBoundsMode(Windows::UI::ViewManagement::ApplicationViewBoundsMode::UseCoreWindow);
+	Windows::UI::ViewManagement::ApplicationView::GetForCurrentView()->SetDesiredBoundsMode(Windows::UI::ViewManagement::ApplicationViewBoundsMode::UseCoreWindow);
 }
 
 

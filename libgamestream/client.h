@@ -33,9 +33,11 @@ typedef struct _SERVER_DATA {
   char* gpuType;
   bool paired;
   bool supports4K;
+  char* codecText;
   bool unsupported;
   int currentGame;
   int serverMajorVersion;
+  char* maxLumaPixelsHEVC;
   char* gsVersion;
   PDISPLAY_MODE modes;
   SERVER_INFORMATION serverInfo;

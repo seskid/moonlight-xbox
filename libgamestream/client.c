@@ -177,6 +177,7 @@ static int load_server_status(PSERVER_DATA server) {
     char *currentGameText = NULL;
     char *stateText = NULL;
     char *serverCodecModeSupportText = NULL;
+    char *maxLumaPixelsHEVC = NULL;
 
     ret = GS_INVALID;
 
@@ -221,6 +222,9 @@ static int load_server_status(PSERVER_DATA server) {
     if (xml_search(data->memory, data->size, "ServerCodecModeSupport", &serverCodecModeSupportText) != GS_OK)
       goto cleanup;
 
+    if (xml_search(data->memory, data->size, "MaxLumaPixelsHEVC", &maxLumaPixelsHEVC) != GS_OK)
+      goto cleanup;
+
     if (xml_search(data->memory, data->size, "gputype", &server->gpuType) != GS_OK)
       goto cleanup;
 
@@ -241,6 +245,7 @@ static int load_server_status(PSERVER_DATA server) {
     server->currentGame = currentGameText == NULL ? 0 : atoi(currentGameText);
     server->supports4K = serverCodecModeSupportText != NULL;
     server->serverMajorVersion = atoi(server->serverInfo.serverInfoAppVersion);
+    server->maxLumaPixelsHEVC = maxLumaPixelsHEVC;
 
     if (strstr(stateText, "_SERVER_BUSY") == NULL) {
       // After GFE 2.8, current game remains set even after streaming
@@ -262,6 +267,9 @@ static int load_server_status(PSERVER_DATA server) {
 
     if (serverCodecModeSupportText != NULL)
       free(serverCodecModeSupportText);
+
+       if (maxLumaPixelsHEVC != NULL)
+      free(maxLumaPixelsHEVC);
 
     i++;
   } while (ret != GS_OK && i < 2);

@@ -25,9 +25,7 @@ namespace moonlight_xbox_dx {
 	int FFMpegDecoder::Init(int videoFormat, int width, int height, int redrawRate, void* context, int drFlags) {
 
  
-			char message1[4086];
-				sprintf(message1,"What is the video format %d",videoFormat);
-				
+			
 #if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58,10,100)
         avcodec_register_all();
 #endif
