@@ -3,7 +3,6 @@
 #include "Client\MoonlightClient.h"
 #include "..\Common\DirectXHelper.h"
 #include <Streaming\FFMpegDecoder.h>
-#include <Streaming\decoder.h>
 #include <Utils.hpp>
 
 extern "C" {
@@ -252,7 +251,7 @@ void VideoRenderer::CreateDeviceDependentResources()
 	renderTextureDesc.MiscFlags = 0;
 
     //determine if hevc is supported
-	configuration->supportsHevc = false;
+	configuration->supportsHevc = true;
 
 
 

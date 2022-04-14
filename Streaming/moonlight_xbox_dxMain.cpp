@@ -11,14 +11,14 @@ using namespace Windows::System::Threading;
 using namespace Concurrency;
 
 // Loads and initializes application assets when the application is loaded.
-moonlight_xbox_dxMain::moonlight_xbox_dxMain(const std::shared_ptr<DX::DeviceResources>& deviceResources, Windows::UI::Xaml::FrameworkElement^ flyoutButton, Windows::UI::Xaml::Controls::MenuFlyout^ flyout, Windows::UI::Core::CoreDispatcher^ dispatcher, MoonlightClient* client,StreamConfiguration ^configuration):
+moonlight_xbox_dxMain::moonlight_xbox_dxMain(const std::shared_ptr<DX::DeviceResources>& deviceResources, Windows::UI::Xaml::FrameworkElement^ flyoutButton, Windows::UI::Xaml::Controls::MenuFlyout^ flyout, Windows::UI::Core::CoreDispatcher^ dispatcher, MoonlightClient* client, StreamConfiguration^ configuration) :
 
-	m_deviceResources(deviceResources), m_pointerLocationX(0.0f),m_flyoutButton(flyoutButton),m_dispatcher(dispatcher),m_flyout(flyout),moonlightClient(client)
+	m_deviceResources(deviceResources), m_pointerLocationX(0.0f), m_flyoutButton(flyoutButton), m_dispatcher(dispatcher), m_flyout(flyout), moonlightClient(client)
 {
 	// Register to be notified if the Device is lost or recreated
 	m_deviceResources->RegisterDeviceNotify(this);
 
-	m_sceneRenderer = std::unique_ptr<VideoRenderer>(new (m_deviceResources,moonlightClient,configuration));
+	m_sceneRenderer = std::unique_ptr<VideoRenderer>(new VideoRenderer(m_deviceResources, moonlightClient, configuration));
 
 	m_fpsTextRenderer = std::unique_ptr<LogRenderer>(new LogRenderer(m_deviceResources));
 
@@ -39,7 +39,7 @@ moonlight_xbox_dxMain::~moonlight_xbox_dxMain()
 }
 
 // Updates application state when the window size changes (e.g. device orientation change)
-void moonlight_xbox_dxMain::CreateWindowSizeDependentResources() 
+void moonlight_xbox_dxMain::CreateWindowSizeDependentResources()
 {
 	// TODO: Replace this with the size-dependent initialization of your app's content.
 	m_sceneRenderer->CreateWindowSizeDependentResources();
@@ -54,20 +54,20 @@ void moonlight_xbox_dxMain::StartRenderLoop()
 	}
 
 	// Create a task that will be run on a background thread.
-	auto workItemHandler = ref new WorkItemHandler([this](IAsyncAction ^ action)
-	{
-		// Calculate the updated frame and render once per vertical blanking interval.
-		while (action->Status == AsyncStatus::Started)
+	auto workItemHandler = ref new WorkItemHandler([this](IAsyncAction^ action)
 		{
-			critical_section::scoped_lock lock(m_criticalSection);
-			int t1 = GetTickCount64();
-			Update();
-			if (Render())
+			// Calculate the updated frame and render once per vertical blanking interval.
+			while (action->Status == AsyncStatus::Started)
 			{
-				m_deviceResources->Present();
+				critical_section::scoped_lock lock(m_criticalSection);
+				int t1 = GetTickCount64();
+				Update();
+				if (Render())
+				{
+					m_deviceResources->Present();
+				}
 			}
-		}
-	});
+		});
 	m_renderLoopWorker = ThreadPool::RunAsync(workItemHandler, WorkItemPriority::High, WorkItemOptions::TimeSliced);
 	if (m_inputLoopWorker != nullptr && m_inputLoopWorker->Status == AsyncStatus::Started) {
 		return;
@@ -93,22 +93,22 @@ void moonlight_xbox_dxMain::StopRenderLoop()
 }
 
 // Updates the application state once per frame.
-void moonlight_xbox_dxMain::Update() 
+void moonlight_xbox_dxMain::Update()
 {
 
 	// Update scene objects.
 	m_timer.Tick([&]()
-	{
-		m_sceneRenderer->Update(m_timer);
-		m_fpsTextRenderer->Update(m_timer);
-		m_statsTextRenderer->Update(m_timer);
-	});
+		{
+			m_sceneRenderer->Update(m_timer);
+			m_fpsTextRenderer->Update(m_timer);
+			m_statsTextRenderer->Update(m_timer);
+		});
 }
 
 // Process all input from the user before updating game state
 void moonlight_xbox_dxMain::ProcessInput()
 {
-	
+
 	auto gamepads = Windows::Gaming::Input::Gamepad::Gamepads;
 	if (gamepads->Size == 0)return;
 	moonlightClient->SetGamepadCount(gamepads->Size);
@@ -127,7 +127,7 @@ void moonlight_xbox_dxMain::ProcessInput()
 		if (isCurrentlyPressed) {
 			m_dispatcher->RunAsync(Windows::UI::Core::CoreDispatcherPriority::Normal, ref new Windows::UI::Core::DispatchedHandler([this]() {
 				Windows::UI::Xaml::Controls::Flyout::ShowAttachedFlyout(m_flyoutButton);
-			}));
+				}));
 			insideFlyout = true;
 		}
 		if (insideFlyout)return;
@@ -169,7 +169,7 @@ void moonlight_xbox_dxMain::ProcessInput()
 
 // Renders the current frame according to the current application state.
 // Returns true if the frame was rendered and is ready to be displayed.
-bool moonlight_xbox_dxMain::Render() 
+bool moonlight_xbox_dxMain::Render()
 {
 	// Don't try to render anything before the first Update.
 	if (m_timer.GetFrameCount() == 0)
@@ -184,7 +184,7 @@ bool moonlight_xbox_dxMain::Render()
 	context->RSSetViewports(1, &viewport);
 
 	// Reset render targets to the screen.
-	ID3D11RenderTargetView *const targets[1] = { m_deviceResources->GetBackBufferRenderTargetView() };
+	ID3D11RenderTargetView* const targets[1] = { m_deviceResources->GetBackBufferRenderTargetView() };
 	context->OMSetRenderTargets(1, targets, m_deviceResources->GetDepthStencilView());
 
 	// Clear the back buffer and depth stencil view.

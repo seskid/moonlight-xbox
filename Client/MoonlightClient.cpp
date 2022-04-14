@@ -36,15 +36,7 @@ int MoonlightClient::StartStreaming(std::shared_ptr<DX::DeviceResources> res,Str
 	const char* charStr = fooA.c_str();
 	this->Connect(charStr);
 	STREAM_CONFIGURATION config;
-
-	 char message1[4096];
-		sprintf(message1, "Host Resolution height : %d \n", sConfig->height);
-		Utils::Log(message1);
-
-		 char message2[4096];
-		sprintf(message2, "Host Resolution width : %d \n", sConfig->width);
-		Utils::Log(message2);
-	config.width = sConfig->width;
+    config.width = sConfig->width;
 	config.height = sConfig->height;
 	config.bitrate = sConfig->bitrate;
 	config.clientRefreshRateX100 = 60 * 100;
@@ -52,7 +44,9 @@ int MoonlightClient::StartStreaming(std::shared_ptr<DX::DeviceResources> res,Str
 	config.encryptionFlags = 0;
 	config.fps = sConfig->FPS;
 	config.packetSize = 1024;
-	config.supportsHevc = sConfig->supportsHevc ? VIDEO_FORMAT_H265 : VIDEO_FORMAT_H264;
+	config.supportsHevc = sConfig->supportsHevc;
+	config.hevcBitratePercentageMultiplier = 75;
+	config.enableHdr = false;
 	config.audioConfiguration = AUDIO_CONFIGURATION_STEREO;
 	if (sConfig->audioConfig == "Surround 5.1") {
 		config.audioConfiguration = AUDIO_CONFIGURATION_51_SURROUND;
