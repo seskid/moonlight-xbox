@@ -10,4 +10,5 @@ public:
 	property int FPS;
 	property bool supportsHevc;
     property Platform::String^ audioConfig;
+	property Platform::String^ videoCodec;
 };

@@ -13,12 +13,14 @@ namespace moonlight_xbox_dx {
         bool paired;
         bool connected;
         bool loading = true;
+        
         MoonlightClient* client;
         int currentlyRunningAppId;
         int bitrate = 8000;
         ScreenResolution^ resolution;
         int fps = 60;
         int autostartID = -1;
+        Platform::String^ videoCodec = "H.264";
         Platform::String^ audioConfig = "Stereo";
         Windows::Foundation::Collections::IVector<MoonlightApp^>^ apps;
         void UpdateApps();
@@ -138,6 +140,16 @@ namespace moonlight_xbox_dx {
                 if (fps == value)return;
                 this->fps = value;
                 OnPropertyChanged("FPS");
+            }
+        }
+
+           property Platform::String^ VideoCodec
+        {
+            Platform::String^ get() { return this->videoCodec; }
+            void set(Platform::String^ value) {
+                if (videoCodec == value)return;
+                this->videoCodec = value;
+                OnPropertyChanged("VideoCodec");
             }
         }
 
