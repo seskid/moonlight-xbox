@@ -250,12 +250,6 @@ void VideoRenderer::CreateDeviceDependentResources()
 	renderTextureDesc.CPUAccessFlags = 0;
 	renderTextureDesc.MiscFlags = 0;
 
-    //determine if hevc is supported
-	configuration->supportsHevc = true;
-
-
-
-
 	DX::ThrowIfFailed(m_deviceResources->GetD3DDevice()->CreateTexture2D(&renderTextureDesc, NULL, renderTexture.GetAddressOf()),"Render Texture Creation");
 	Microsoft::WRL::ComPtr<IDXGIResource1> dxgiResource;
 	createCubeTask.then([this,width,height] () {
