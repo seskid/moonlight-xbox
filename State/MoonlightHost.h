@@ -17,6 +17,7 @@ namespace moonlight_xbox_dx {
         MoonlightClient* client;
         int currentlyRunningAppId;
         int bitrate = 8000;
+        int compositionScale = 1;
         ScreenResolution^ resolution;
         int fps = 60;
         int autostartID = -1;
@@ -130,6 +131,16 @@ namespace moonlight_xbox_dx {
             void set(int value) {
                 this->bitrate = value;
                 OnPropertyChanged("Bitrate");
+            }
+        }
+
+        property int CompositionScale
+        {
+            int get() { return this->compositionScale; }
+            void set(int value) {
+                if (compositionScale == value)return;
+                this->compositionScale = value;
+                OnPropertyChanged("CompositionScale");
             }
         }
 

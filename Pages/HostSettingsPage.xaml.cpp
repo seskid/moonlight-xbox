@@ -46,6 +46,8 @@ void HostSettingsPage::OnNavigatedTo(Windows::UI::Xaml::Navigation::NavigationEv
 	AvailableFPS->Append(30);
 	AvailableFPS->Append(60);
 	AvailableFPS->Append(120);
+	AvailableCompositionScale->Append(1);
+	AvailableCompositionScale->Append(2);
 	AvailableVideoCodecs->Append("H.264");
 	AvailableVideoCodecs->Append("HEVC (H.265)");
 	AvailableAudioConfigs->Append("Stereo");

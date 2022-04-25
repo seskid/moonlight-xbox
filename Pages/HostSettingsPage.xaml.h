@@ -20,6 +20,7 @@ namespace moonlight_xbox_dx
 		MoonlightHost^ host;
 		Windows::Foundation::Collections::IVector<ScreenResolution^>^ availableResolutions;
 		Windows::Foundation::Collections::IVector<int>^ availableFps;
+		Windows::Foundation::Collections::IVector<int>^ availableCompositionScale;
 		Windows::Foundation::Collections::IVector<Platform::String^>^ availableAudioConfigs;
 			Windows::Foundation::Collections::IVector<Platform::String^>^ availableVideoCodecs;
 		int currentResolutionIndex = 0;
@@ -52,6 +53,16 @@ namespace moonlight_xbox_dx
 					this->availableFps = ref new Platform::Collections::Vector<int>();
 				}
 				return this->availableFps;
+			}
+		}
+
+		property Windows::Foundation::Collections::IVector<int>^ AvailableCompositionScale {
+			Windows::Foundation::Collections::IVector<int>^ get() {
+				if (this->availableCompositionScale == nullptr)
+				{
+					this->availableCompositionScale = ref new Platform::Collections::Vector<int>();
+				}
+				return this->availableCompositionScale;
 			}
 		}
 

@@ -8,6 +8,7 @@ public:
 	property int height;
 	property int bitrate;
 	property int FPS;
+	property int compositionScale;
 	property bool supportsHevc;
     property Platform::String^ audioConfig;
 	property Platform::String^ videoCodec;
