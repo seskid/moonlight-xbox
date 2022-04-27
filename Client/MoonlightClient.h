@@ -4,6 +4,7 @@
 #include <Streaming\FramePacer.h>
 #include <Client/StreamConfiguration.h>
 #include "State\MoonlightApp.h"
+
 extern "C" {
 	#include <libavcodec/avcodec.h>
 	#include <Limelight.h>

@@ -1,7 +1,9 @@
 ﻿#include "pch.h"
 #include "moonlight_xbox_dxMain.h"
 #include "Common\DirectXHelper.h"
+#include "Keyboard.h"
 #include "Utils.hpp"
+using namespace DirectX;
 using namespace Windows::Gaming::Input;
 
 
@@ -164,6 +166,11 @@ void moonlight_xbox_dxMain::ProcessInput()
 			moonlightClient->SendGamepadReading(i, reading);
 		}
 	}
+
+	
+
+	auto kb = m_keyboard->GetState();
+	
 }
 
 
