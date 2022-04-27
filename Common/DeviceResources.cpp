@@ -478,22 +478,10 @@ void DX::DeviceResources::CreateWindowSizeDependentResources()
 // Determine the dimensions of the render target and whether it will be scaled down.
 void DX::DeviceResources::UpdateRenderTargetSize()
 {
-	moonlight_xbox_dx::ApplicationState^ state = GetApplicationState();
-	int user_compositionScale = 1;
-
-	auto iid = Utils::StringFromStdString(state->autostartInstance);
-	for (int i = 0; i < state->SavedHosts->Size; i++) {
-		auto host = state->SavedHosts->GetAt(i);
-	
-		if (host->InstanceId->Equals(iid)) {
-			user_compositionScale = host->CompositionScale;
-			int y = 4;
-		}
-	}
-
+	moonlight_xbox_dx::StreamConfiguration^ config = GetStreamConfig();
 	m_effectiveDpi = m_dpi;
-	m_effectiveCompositionScaleX = m_compositionScaleX * user_compositionScale;
-	m_effectiveCompositionScaleY = m_compositionScaleY * user_compositionScale;
+	m_effectiveCompositionScaleX = m_compositionScaleX * config->compositionScale;
+	m_effectiveCompositionScaleY = m_compositionScaleY * config->compositionScale;
 }
 
 // This method is called when the XAML control is created (or re-created).
