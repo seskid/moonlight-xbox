@@ -528,30 +528,35 @@ void moonlight_xbox_dxMain::ProcessInput()
 		xboxKeyboard->keyCode = VK_NUMLOCK;
 	}
 	if (kb.LeftShift) {
+		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = VK_LSHIFT;
-		xboxKeyboard->modifiers =1;
+		xboxKeyboard->modifiers |= MODIFIER_SHIFT;
 	}
 	if (kb.RightShift) {
+		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = VK_RSHIFT;
-		xboxKeyboard->modifiers =1;
+		xboxKeyboard->modifiers |= MODIFIER_SHIFT;
 	}
 	
 	if (kb.LeftAlt) {
-		xboxKeyboard->keyCode = 0XA4;
-		xboxKeyboard->modifiers = 1;
+		xboxKeyboard->pressed = true;
+		xboxKeyboard->keyCode = VK_MENU;
+		xboxKeyboard->modifiers |= MODIFIER_ALT;
 	}
 	if (kb.RightAlt) {
-	
-		xboxKeyboard->keyCode = 0XA5;
-		xboxKeyboard->modifiers=1;
+		xboxKeyboard->pressed = true;
+		xboxKeyboard->keyCode = VK_MENU;
+		xboxKeyboard->modifiers |= MODIFIER_ALT;
 	}
 	if (kb.LeftControl) {
-		xboxKeyboard->keyCode = VK_LCONTROL;
-		xboxKeyboard->modifiers =1;
+		xboxKeyboard->pressed = true;
+		xboxKeyboard->keyCode = VK_CONTROL;
+		xboxKeyboard->modifiers |= MODIFIER_CTRL;
 	}
 	if (kb.RightControl) {
-		xboxKeyboard->keyCode = VK_RCONTROL;
-		xboxKeyboard->modifiers =1;
+		xboxKeyboard->pressed = true;
+		xboxKeyboard->keyCode = VK_CONTROL;
+		xboxKeyboard->modifiers |= MODIFIER_CTRL;
 	}
 
 	moonlightClient->SendKeyBoardEvent(xboxKeyboard);
