@@ -10,8 +10,10 @@ extern "C" {
 #include <Streaming\AudioPlayer.h>
 #include <Utils.hpp>
 #include <Client\StreamConfiguration.h>
+#include <Client/XboxKeyboard.h>
 
 using namespace moonlight_xbox_dx;
+using namespace DirectX;
 using namespace Windows::Gaming::Input;
 
 
@@ -197,6 +199,11 @@ void MoonlightClient::SendGamepadReading(short controllerNumber, GamepadReading 
 	LiSendMultiControllerEvent(controllerNumber, activeGamepadMask, buttonFlags, (short)(reading.LeftTrigger * 32767), (short)(reading.RightTrigger * 32767), (short)(reading.LeftThumbstickX * 32767), (short)(reading.LeftThumbstickY * 32767), (short)(reading.RightThumbstickX * 32767), (short)(reading.RightThumbstickY * 32767));
 }
 
+
+
+void MoonlightClient::SendKeyBoardEvent(XboxKeyboard  ^xboxKeyboard) {
+	LiSendKeyboardEvent(xboxKeyboard->keyCode,xboxKeyboard->pressed ? KEY_ACTION_DOWN : KEY_ACTION_UP, xboxKeyboard->modifiers);
+}
 
 void MoonlightClient::SendMousePosition(float deltaX, float deltaY) {
 	LiSendMouseMoveEvent(deltaX, deltaY);

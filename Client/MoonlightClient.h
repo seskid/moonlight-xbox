@@ -3,13 +3,16 @@
 #include "Common/DeviceResources.h"
 #include <Streaming\FramePacer.h>
 #include <Client/StreamConfiguration.h>
+#include <Client/XboxKeyboard.h>
 #include "State\MoonlightApp.h"
+#include "Keyboard.h"
 
 extern "C" {
 	#include <libavcodec/avcodec.h>
 	#include <Limelight.h>
 	#include<libgamestream/client.h>
 }
+using namespace DirectX;
 
 typedef void(*MoonlightErrorCallback)(const char *msg);
 namespace moonlight_xbox_dx {
@@ -27,10 +30,11 @@ namespace moonlight_xbox_dx {
 		void SendMousePosition(float x, float y);
 		void SendMousePressed(int button);
 		void SendMouseReleased(int button);
+		void SendKeyBoardEvent(XboxKeyboard ^xboxKeyboard);
 		void SendScroll(float value);
 		void SetSoftwareEncoder(bool value);
 		void SetGamepadCount(short count);
-		int GetRunningAppID();
+	    int GetRunningAppID();
 		void StopStreaming();
 		void StopApp();
 		void Unpair();
@@ -42,5 +46,6 @@ namespace moonlight_xbox_dx {
 		char* hostname = NULL;
 		bool useSoftwareEncoder = false;
 		int activeGamepadMask = 0;
+		bool keyBoardPressed = false;
 	};
 }

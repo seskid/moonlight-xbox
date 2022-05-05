@@ -7,6 +7,7 @@
 #include "Content\StatsRenderer.h"
 #include "Mouse.h"
 #include "Keyboard.h"
+#include <Client/XboxKeyboard.h>
 
 // Renders Direct2D and 3D content on the screen.
 namespace moonlight_xbox_dx
@@ -39,6 +40,7 @@ namespace moonlight_xbox_dx
 		//Keyboard and mouse inputs
 		std::unique_ptr<DirectX::Keyboard> m_keyboard;
 		std::unique_ptr<DirectX::Mouse> m_mouse;
+		
 
 		// TODO: Replace with your own content renderers.
 		std::unique_ptr<VideoRenderer> m_sceneRenderer;
@@ -61,5 +63,6 @@ namespace moonlight_xbox_dx
 		Windows::UI::Core::CoreDispatcher ^m_dispatcher;
 		Windows::UI::Xaml::Controls::MenuFlyout^ m_flyout;
 		MoonlightClient* moonlightClient;
+		XboxKeyboard^ xboxKeyboard;
 	};
 }

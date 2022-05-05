@@ -152,6 +152,7 @@
     <ClInclude Include="Content\StatsRenderer.h">
       <Filter>Content</Filter>
     </ClInclude>
+    <ClInclude Include="Client\XboxKeyboard.h" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />
