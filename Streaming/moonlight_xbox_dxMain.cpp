@@ -182,6 +182,16 @@ void moonlight_xbox_dxMain::ProcessInput()
 	xboxKeyboard->pressed = false;
 	xboxKeyboard->modifiers = 0;
 
+
+	if (kb.CapsLock) {
+		xboxKeyboard->pressed = true;
+		xboxKeyboard->keyCode = VK_CAPITAL;
+	}
+	if (kb.NumLock) {
+		xboxKeyboard->pressed = true;
+		xboxKeyboard->keyCode = VK_NUMLOCK;
+	}
+
 	if (kb.Space) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = VK_SPACE;
@@ -224,92 +234,115 @@ void moonlight_xbox_dxMain::ProcessInput()
 	if (kb.OemSemicolon) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = VK_OEM_1;
+		CheckModifiers(kb);
+
 	}
 	if (kb.OemPlus) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = VK_OEM_PLUS;
+		CheckModifiers(kb);
 	}
 	if (kb.OemMinus) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = VK_OEM_MINUS;
+		CheckModifiers(kb);
 	}
 	if (kb.OemComma) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = VK_OEM_COMMA;
+		CheckModifiers(kb);
 	}
 	if (kb.OemPeriod) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = VK_OEM_PERIOD;
+		CheckModifiers(kb);
 	}
 	if (kb.OemQuestion) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = VK_OEM_2;
+		CheckModifiers(kb);
 	}
 	if (kb.OemTilde) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = VK_OEM_3;
+		CheckModifiers(kb);
 	}
 	if (kb.OemOpenBrackets) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = VK_OEM_4;
+		CheckModifiers(kb);
 	}
 	if (kb.OemPipe) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = VK_OEM_5;
+		CheckModifiers(kb);
 	}
 	if (kb.OemBackslash) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = VK_OEM_102;
+		CheckModifiers(kb);
 	}
 	if (kb.OemCloseBrackets) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = VK_OEM_6;
+		CheckModifiers(kb);
 	}
 	if (kb.OemQuotes) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = VK_OEM_7;
+		CheckModifiers(kb);
 	}
 
 	//numeric
 	if (kb.D0) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X30;
+		CheckModifiers(kb);
 	}
 	if (kb.D1) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X31;
+		CheckModifiers(kb);
 	}
 	if (kb.D2) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X32;
+		CheckModifiers(kb);
 	}
 	if (kb.D3) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X33;
+		CheckModifiers(kb);
 	}
 	if (kb.D4) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X34;
+		CheckModifiers(kb);
 	}
 	if (kb.D5) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X35;
+		CheckModifiers(kb);
 	}
 	if (kb.D6) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X36;
+		CheckModifiers(kb);
 	}
 	if (kb.D7) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X37;
+		CheckModifiers(kb);
 	}
 	if (kb.D8) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X38;
+		CheckModifiers(kb);
 	}
 	if (kb.D9) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X39;
+		CheckModifiers(kb);
 	}
 
 	if (kb.NumPad0) {
@@ -403,95 +436,112 @@ void moonlight_xbox_dxMain::ProcessInput()
 		xboxKeyboard->keyCode = VK_F12;
 	}
 	
-
-
-	
 	//letters
 	if (kb.A) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X41;
+		CheckModifiers(kb);
 	}
 
 	if (kb.B) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X42;
+		CheckModifiers(kb);
 	}
 	if (kb.C) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X43;
+		CheckModifiers(kb);
 	}
 	if (kb.D) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X44;
+		CheckModifiers(kb);
 	}
 
 	if (kb.E) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X45;
+		CheckModifiers(kb);
 	}
 	if (kb.F) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X46;
+		CheckModifiers(kb);
 	}
 	if (kb.G) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X47;
+		CheckModifiers(kb);
 	}
 
 	if (kb.H) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X48;
+		CheckModifiers(kb);
 	}
 	if (kb.I) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X49;
+		CheckModifiers(kb);
 	}
 	if (kb.J) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X4A;
+		CheckModifiers(kb);
 	}
 
 	if (kb.K) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X4B;
+		CheckModifiers(kb);
 	}
 	if (kb.L) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X4C;
+		CheckModifiers(kb);
 	}
 	if (kb.M) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X4D;
+		CheckModifiers(kb);
 	}
 
 	if (kb.N) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X4E;
+		CheckModifiers(kb);
 	}
 	if (kb.O) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X4F;
+		CheckModifiers(kb);
 	}
 	if (kb.P) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X50;
+		CheckModifiers(kb);
 	}
 
 	if (kb.Q) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X51;
+		CheckModifiers(kb);
 	}
 	if (kb.R) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X52;
+		CheckModifiers(kb);
 	}
 	if (kb.S) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X53;
+		CheckModifiers(kb);
 	}
 	if (kb.T) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X54;
+		CheckModifiers(kb);
 	}
 	if (kb.U) {
 		xboxKeyboard->pressed = true;
@@ -500,66 +550,51 @@ void moonlight_xbox_dxMain::ProcessInput()
 	if (kb.V) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X56;
+		CheckModifiers(kb);
 	}
 	if (kb.W) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X57;
+		CheckModifiers(kb);
 	}
 	if (kb.X) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X58;
+		CheckModifiers(kb);
 	}
 	if (kb.Y) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X59;
+		CheckModifiers(kb);
 	}
 	if (kb.Z) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = 0X5A;
+		CheckModifiers(kb);
 	}
-	
-	//modifies
-	if (kb.CapsLock) {
+	if (kb.PageUp) {
 		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_CAPITAL;
+		xboxKeyboard->keyCode = VK_PRIOR;
 	}
-	if (kb.NumLock) {
+	if (kb.PageDown) {
 		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_NUMLOCK;
-	}
-	if (kb.LeftShift) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_LSHIFT;
-		xboxKeyboard->modifiers |= MODIFIER_SHIFT;
-	}
-	if (kb.RightShift) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_RSHIFT;
-		xboxKeyboard->modifiers |= MODIFIER_SHIFT;
-	}
-	
-	if (kb.LeftAlt) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_MENU;
-		xboxKeyboard->modifiers |= MODIFIER_ALT;
-	}
-	if (kb.RightAlt) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_MENU;
-		xboxKeyboard->modifiers |= MODIFIER_ALT;
-	}
-	if (kb.LeftControl) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_CONTROL;
-		xboxKeyboard->modifiers |= MODIFIER_CTRL;
-	}
-	if (kb.RightControl) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_CONTROL;
-		xboxKeyboard->modifiers |= MODIFIER_CTRL;
+		xboxKeyboard->keyCode = VK_NEXT;
 	}
 
+	
 	moonlightClient->SendKeyBoardEvent(xboxKeyboard);
+}
+
+void moonlight_xbox_dxMain::CheckModifiers(Keyboard::State kb) {
+	if (kb.LeftShift|| kb.RightShift) {
+		xboxKeyboard->modifiers |= MODIFIER_SHIFT;
+	}
+	if (kb.LeftControl || kb.RightControl) {
+		xboxKeyboard->modifiers |= MODIFIER_CTRL;
+	}
+	if (kb.LeftAlt|| kb.RightAlt) {
+		xboxKeyboard->modifiers |= MODIFIER_ALT;
+	}
 }
 
 

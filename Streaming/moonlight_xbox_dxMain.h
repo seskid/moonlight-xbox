@@ -33,6 +33,7 @@ namespace moonlight_xbox_dx
 		void ProcessInput();
 		void Update();
 		bool Render();
+		void CheckModifiers(Keyboard::State kb);
 
 		// Cached pointer to device resources.
 		std::shared_ptr<DX::DeviceResources> m_deviceResources;
