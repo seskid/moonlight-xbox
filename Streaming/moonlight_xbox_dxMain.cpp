@@ -182,16 +182,10 @@ void moonlight_xbox_dxMain::ProcessInput()
 	xboxKeyboard->pressed = false;
 	xboxKeyboard->modifiers = 0;
 
-
-	if (kb.CapsLock) {
+    if (kb.CapsLock) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = VK_CAPITAL;
 	}
-	if (kb.NumLock) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_NUMLOCK;
-	}
-
 	if (kb.Space) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = VK_SPACE;
@@ -345,6 +339,11 @@ void moonlight_xbox_dxMain::ProcessInput()
 		CheckModifiers(kb);
 	}
 
+	if (kb.NumLock) {
+		xboxKeyboard->pressed = true;
+		xboxKeyboard->keyCode = VK_NUMLOCK;
+	}
+
 	if (kb.NumPad0) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = VK_NUMPAD0;
@@ -384,6 +383,30 @@ void moonlight_xbox_dxMain::ProcessInput()
 	if (kb.NumPad9) {
 		xboxKeyboard->pressed = true;
 		xboxKeyboard->keyCode = VK_NUMPAD9;
+	}
+	if (kb.Multiply) {
+		xboxKeyboard->pressed = true;
+		xboxKeyboard->keyCode = VK_MULTIPLY;
+	}
+	if (kb.Add) {
+		xboxKeyboard->pressed = true;
+		xboxKeyboard->keyCode = VK_ADD;
+	}
+	if (kb.Subtract) {
+		xboxKeyboard->pressed = true;
+		xboxKeyboard->keyCode = VK_SUBTRACT;
+	}
+	if (kb.Separator) {
+		xboxKeyboard->pressed = true;
+		xboxKeyboard->keyCode = VK_SEPARATOR;
+	}
+	if (kb.Divide) {
+		xboxKeyboard->pressed = true;
+		xboxKeyboard->keyCode = VK_DIVIDE;
+	}
+	if (kb.Decimal) {
+		xboxKeyboard->pressed = true;
+		xboxKeyboard->keyCode = VK_DECIMAL;
 	}
 
 	//function keys
