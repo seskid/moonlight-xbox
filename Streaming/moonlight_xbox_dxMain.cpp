@@ -119,493 +119,501 @@ void moonlight_xbox_dxMain::ProcessInput()
 {
 
 	auto gamepads = Windows::Gaming::Input::Gamepad::Gamepads;
-	//if (gamepads->Size == 0)return;
-	moonlightClient->SetGamepadCount(gamepads->Size);
-	for (int i = 0; i < gamepads->Size; i++) {
-		Windows::Gaming::Input::Gamepad^ gamepad = gamepads->GetAt(i);
-		auto reading = gamepad->GetCurrentReading();
-		//If this combination is pressed on gamed we should handle some magic things :)
-		GamepadButtons magicKey[] = { GamepadButtons::Menu,GamepadButtons::View };
-		bool isCurrentlyPressed = true;
-		for (auto k : magicKey) {
-			if ((reading.Buttons & k) != k) {
-				isCurrentlyPressed = false;
-				break;
-			}
-		}
-		if (isCurrentlyPressed) {
-			m_dispatcher->RunAsync(Windows::UI::Core::CoreDispatcherPriority::Normal, ref new Windows::UI::Core::DispatchedHandler([this]() {
-				Windows::UI::Xaml::Controls::Flyout::ShowAttachedFlyout(m_flyoutButton);
-				}));
-			insideFlyout = true;
-		}
-		if (insideFlyout)return;
-		//If mouse mode is enabled the gamepad acts as a mouse, instead we pass the raw events to the host
-		if (mouseMode) {
-			//Position
-
-			moonlightClient->SendMousePosition(reading.LeftThumbstickX * 5, reading.LeftThumbstickY * -5);
-			//Left Click
-			if ((reading.Buttons & GamepadButtons::A) == GamepadButtons::A) {
-				if (!leftMouseButtonPressed) {
-					leftMouseButtonPressed = true;
-					moonlightClient->SendMousePressed(BUTTON_LEFT);
+	if (gamepads->Size == 0) {
+		return;
+	}
+	else {
+		moonlightClient->SetGamepadCount(gamepads->Size);
+		for (int i = 0; i < gamepads->Size; i++) {
+			Windows::Gaming::Input::Gamepad^ gamepad = gamepads->GetAt(i);
+			auto reading = gamepad->GetCurrentReading();
+			//If this combination is pressed on gamed we should handle some magic things :)
+			GamepadButtons magicKey[] = { GamepadButtons::Menu,GamepadButtons::View };
+			bool isCurrentlyPressed = true;
+			for (auto k : magicKey) {
+				if ((reading.Buttons & k) != k) {
+					isCurrentlyPressed = false;
+					break;
 				}
 			}
-			else if (leftMouseButtonPressed) {
-				leftMouseButtonPressed = false;
-				moonlightClient->SendMouseReleased(BUTTON_LEFT);
+			if (isCurrentlyPressed) {
+				m_dispatcher->RunAsync(Windows::UI::Core::CoreDispatcherPriority::Normal, ref new Windows::UI::Core::DispatchedHandler([this]() {
+					Windows::UI::Xaml::Controls::Flyout::ShowAttachedFlyout(m_flyoutButton);
+					}));
+				insideFlyout = true;
 			}
-			//Right Click
-			if ((reading.Buttons & GamepadButtons::X) == GamepadButtons::X) {
-				if (!rightMouseButtonPressed) {
-					rightMouseButtonPressed = true;
-					moonlightClient->SendMousePressed(BUTTON_RIGHT);
+			if (insideFlyout)return;
+			//If mouse mode is enabled the gamepad acts as a mouse, instead we pass the raw events to the host
+			if (mouseMode) {
+				//Position
+
+				moonlightClient->SendMousePosition(reading.LeftThumbstickX * 5, reading.LeftThumbstickY * -5);
+				//Left Click
+				if ((reading.Buttons & GamepadButtons::A) == GamepadButtons::A) {
+					if (!leftMouseButtonPressed) {
+						leftMouseButtonPressed = true;
+						moonlightClient->SendMousePressed(BUTTON_LEFT);
+					}
 				}
+				else if (leftMouseButtonPressed) {
+					leftMouseButtonPressed = false;
+					moonlightClient->SendMouseReleased(BUTTON_LEFT);
+				}
+				//Right Click
+				if ((reading.Buttons & GamepadButtons::X) == GamepadButtons::X) {
+					if (!rightMouseButtonPressed) {
+						rightMouseButtonPressed = true;
+						moonlightClient->SendMousePressed(BUTTON_RIGHT);
+					}
+				}
+				else if (rightMouseButtonPressed) {
+					rightMouseButtonPressed = false;
+					moonlightClient->SendMouseReleased(BUTTON_RIGHT);
+				}
+				//Scroll
+				moonlightClient->SendScroll(reading.RightThumbstickY);
 			}
-			else if (rightMouseButtonPressed) {
-				rightMouseButtonPressed = false;
-				moonlightClient->SendMouseReleased(BUTTON_RIGHT);
+			else {
+				moonlightClient->SendGamepadReading(i, reading);
 			}
-			//Scroll
-			moonlightClient->SendScroll(reading.RightThumbstickY);
-		}
-		else {
-			moonlightClient->SendGamepadReading(i, reading);
 		}
 	}
-    
-	auto kb = m_keyboard->GetState();
-    Keyboard::KeyboardStateTracker tracker;
-    tracker.Update(kb);
 	
-	xboxKeyboard->pressed = false;
-	xboxKeyboard->modifiers = 0;
-
-    if (kb.CapsLock) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_CAPITAL;
-	}
-	if (kb.Space) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_SPACE;
-	}
-
-	if (kb.Enter) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_RETURN;
-	}
-	if (kb.Tab) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_TAB;
-	}
-	if (kb.Back) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_BACK;
-	}
-	if (kb.Escape) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_ESCAPE;
-	}
-	if (kb.Left) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_LEFT;
-	}
-	if (kb.Right) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_RIGHT;
-	}
-	if (kb.Down) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_DOWN;
-	}
-	if (kb.Up) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_UP;
-	}
-
-	//OEM's
-	if (kb.OemSemicolon) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_OEM_1;
-		CheckModifiers(kb);
-
-	}
-	if (kb.OemPlus) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_OEM_PLUS;
-		CheckModifiers(kb);
-	}
-	if (kb.OemMinus) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_OEM_MINUS;
-		CheckModifiers(kb);
-	}
-	if (kb.OemComma) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_OEM_COMMA;
-		CheckModifiers(kb);
-	}
-	if (kb.OemPeriod) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_OEM_PERIOD;
-		CheckModifiers(kb);
-	}
-	if (kb.OemQuestion) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_OEM_2;
-		CheckModifiers(kb);
-	}
-	if (kb.OemTilde) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_OEM_3;
-		CheckModifiers(kb);
-	}
-	if (kb.OemOpenBrackets) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_OEM_4;
-		CheckModifiers(kb);
-	}
-	if (kb.OemPipe) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_OEM_5;
-		CheckModifiers(kb);
-	}
-	if (kb.OemBackslash) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_OEM_102;
-		CheckModifiers(kb);
-	}
-	if (kb.OemCloseBrackets) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_OEM_6;
-		CheckModifiers(kb);
-	}
-	if (kb.OemQuotes) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_OEM_7;
-		CheckModifiers(kb);
-	}
-
-	//numeric
-	if (kb.D0) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X30;
-		CheckModifiers(kb);
-	}
-	if (kb.D1) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X31;
-		CheckModifiers(kb);
-	}
-	if (kb.D2) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X32;
-		CheckModifiers(kb);
-	}
-	if (kb.D3) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X33;
-		CheckModifiers(kb);
-	}
-	if (kb.D4) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X34;
-		CheckModifiers(kb);
-	}
-	if (kb.D5) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X35;
-		CheckModifiers(kb);
-	}
-	if (kb.D6) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X36;
-		CheckModifiers(kb);
-	}
-	if (kb.D7) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X37;
-		CheckModifiers(kb);
-	}
-	if (kb.D8) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X38;
-		CheckModifiers(kb);
-	}
-	if (kb.D9) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X39;
-		CheckModifiers(kb);
-	}
-
-	if (kb.NumLock) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_NUMLOCK;
-	}
-
-	if (kb.NumPad0) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_NUMPAD0;
-	}
-	if (kb.NumPad1) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_NUMPAD1;
-	}
-	if (kb.NumPad2) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_NUMPAD2;
-	}
-	if (kb.NumPad3) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_NUMPAD3;
-	}
-	if (kb.NumPad4) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_NUMPAD4;
-	}
-	if (kb.NumPad5) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_NUMPAD5;
-	}
-	if (kb.NumPad6) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_NUMPAD6;
-	}
-	if (kb.NumPad7) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_NUMPAD7;
-	}
-	if (kb.NumPad8) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_NUMPAD8;
-	}
-	if (kb.NumPad9) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_NUMPAD9;
-	}
-	if (kb.Multiply) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_MULTIPLY;
-	}
-	if (kb.Add) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_ADD;
-	}
-	if (kb.Subtract) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_SUBTRACT;
-	}
-	if (kb.Separator) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_SEPARATOR;
-	}
-	if (kb.Divide) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_DIVIDE;
-	}
-	if (kb.Decimal) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_DECIMAL;
-	}
-
-	//function keys
-	if (kb.F1) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_F1;
-	}
-	if (kb.F2) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_F2;
-	}
-	if (kb.F1) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_F3;
-	}
-	if (kb.F4) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_F4;
-	}
-	if (kb.F5) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_F5;
-	}
-	if (kb.F6) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_F6;
-	}
-	if (kb.F7) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_F7;
-	}
-	if (kb.F8) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_F8;
-	}
-	if (kb.F9) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_F9;
-	}
-	if (kb.F10) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_F10;
-	}
-	if (kb.F11) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_F11;
-	}
-	if (kb.F12) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_F12;
-	}
 	
-	//letters
-	if (kb.A) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X41;
-		CheckModifiers(kb);
-	}
+	if(m_keyboard->IsConnected()){
+		auto kb = m_keyboard->GetState();
 
-	if (kb.B) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X42;
-		CheckModifiers(kb);
-	}
-	if (kb.C) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X43;
-		CheckModifiers(kb);
-	}
-	if (kb.D) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X44;
-		CheckModifiers(kb);
-	}
+		Keyboard::KeyboardStateTracker tracker;
+		tracker.Update(kb);
 
-	if (kb.E) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X45;
-		CheckModifiers(kb);
-	}
-	if (kb.F) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X46;
-		CheckModifiers(kb);
-	}
-	if (kb.G) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X47;
-		CheckModifiers(kb);
-	}
+		xboxKeyboard->pressed = false;
+		xboxKeyboard->modifiers = 0;
 
-	if (kb.H) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X48;
-		CheckModifiers(kb);
-	}
-	if (kb.I) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X49;
-		CheckModifiers(kb);
-	}
-	if (kb.J) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X4A;
-		CheckModifiers(kb);
-	}
+		if (kb.CapsLock) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_CAPITAL;
+		}
+		if (kb.Space) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_SPACE;
+		}
 
-	if (kb.K) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X4B;
-		CheckModifiers(kb);
-	}
-	if (kb.L) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X4C;
-		CheckModifiers(kb);
-	}
-	if (kb.M) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X4D;
-		CheckModifiers(kb);
-	}
+		if (kb.Enter) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_RETURN;
+		}
+		if (kb.Tab) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_TAB;
+		}
+		if (kb.Back) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_BACK;
+		}
+		if (kb.Escape) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_ESCAPE;
+		}
+		if (kb.Left) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_LEFT;
+		}
+		if (kb.Right) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_RIGHT;
+		}
+		if (kb.Down) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_DOWN;
+		}
+		if (kb.Up) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_UP;
+		}
 
-	if (kb.N) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X4E;
-		CheckModifiers(kb);
-	}
-	if (kb.O) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X4F;
-		CheckModifiers(kb);
-	}
-	if (kb.P) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X50;
-		CheckModifiers(kb);
-	}
+		//OEM's
+		if (kb.OemSemicolon) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_OEM_1;
+			CheckModifiers(kb);
 
-	if (kb.Q) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X51;
-		CheckModifiers(kb);
-	}
-	if (kb.R) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X52;
-		CheckModifiers(kb);
-	}
-	if (kb.S) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X53;
-		CheckModifiers(kb);
-	}
-	if (kb.T) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X54;
-		CheckModifiers(kb);
-	}
-	if (kb.U) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X55;
-	}
-	if (kb.V) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X56;
-		CheckModifiers(kb);
-	}
-	if (kb.W) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X57;
-		CheckModifiers(kb);
-	}
-	if (kb.X) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X58;
-		CheckModifiers(kb);
-	}
-	if (kb.Y) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X59;
-		CheckModifiers(kb);
-	}
-	if (kb.Z) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = 0X5A;
-		CheckModifiers(kb);
-	}
-	if (kb.PageUp) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_PRIOR;
-	}
-	if (kb.PageDown) {
-		xboxKeyboard->pressed = true;
-		xboxKeyboard->keyCode = VK_NEXT;
-	}
+		}
+		if (kb.OemPlus) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_OEM_PLUS;
+			CheckModifiers(kb);
+		}
+		if (kb.OemMinus) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_OEM_MINUS;
+			CheckModifiers(kb);
+		}
+		if (kb.OemComma) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_OEM_COMMA;
+			CheckModifiers(kb);
+		}
+		if (kb.OemPeriod) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_OEM_PERIOD;
+			CheckModifiers(kb);
+		}
+		if (kb.OemQuestion) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_OEM_2;
+			CheckModifiers(kb);
+		}
+		if (kb.OemTilde) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_OEM_3;
+			CheckModifiers(kb);
+		}
+		if (kb.OemOpenBrackets) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_OEM_4;
+			CheckModifiers(kb);
+		}
+		if (kb.OemPipe) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_OEM_5;
+			CheckModifiers(kb);
+		}
+		if (kb.OemBackslash) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_OEM_102;
+			CheckModifiers(kb);
+		}
+		if (kb.OemCloseBrackets) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_OEM_6;
+			CheckModifiers(kb);
+		}
+		if (kb.OemQuotes) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_OEM_7;
+			CheckModifiers(kb);
+		}
 
-	
-	moonlightClient->SendKeyBoardEvent(xboxKeyboard);
+		//numeric
+		if (kb.D0) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X30;
+			CheckModifiers(kb);
+		}
+		if (kb.D1) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X31;
+			CheckModifiers(kb);
+		}
+		if (kb.D2) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X32;
+			CheckModifiers(kb);
+		}
+		if (kb.D3) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X33;
+			CheckModifiers(kb);
+		}
+		if (kb.D4) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X34;
+			CheckModifiers(kb);
+		}
+		if (kb.D5) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X35;
+			CheckModifiers(kb);
+		}
+		if (kb.D6) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X36;
+			CheckModifiers(kb);
+		}
+		if (kb.D7) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X37;
+			CheckModifiers(kb);
+		}
+		if (kb.D8) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X38;
+			CheckModifiers(kb);
+		}
+		if (kb.D9) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X39;
+			CheckModifiers(kb);
+		}
+
+		if (kb.NumLock) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_NUMLOCK;
+		}
+
+		if (kb.NumPad0) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_NUMPAD0;
+		}
+		if (kb.NumPad1) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_NUMPAD1;
+		}
+		if (kb.NumPad2) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_NUMPAD2;
+		}
+		if (kb.NumPad3) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_NUMPAD3;
+		}
+		if (kb.NumPad4) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_NUMPAD4;
+		}
+		if (kb.NumPad5) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_NUMPAD5;
+		}
+		if (kb.NumPad6) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_NUMPAD6;
+		}
+		if (kb.NumPad7) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_NUMPAD7;
+		}
+		if (kb.NumPad8) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_NUMPAD8;
+		}
+		if (kb.NumPad9) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_NUMPAD9;
+		}
+		if (kb.Multiply) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_MULTIPLY;
+		}
+		if (kb.Add) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_ADD;
+		}
+		if (kb.Subtract) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_SUBTRACT;
+		}
+		if (kb.Separator) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_SEPARATOR;
+		}
+		if (kb.Divide) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_DIVIDE;
+		}
+		if (kb.Decimal) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_DECIMAL;
+		}
+
+		//function keys
+		if (kb.F1) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_F1;
+		}
+		if (kb.F2) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_F2;
+		}
+		if (kb.F1) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_F3;
+		}
+		if (kb.F4) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_F4;
+		}
+		if (kb.F5) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_F5;
+		}
+		if (kb.F6) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_F6;
+		}
+		if (kb.F7) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_F7;
+		}
+		if (kb.F8) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_F8;
+		}
+		if (kb.F9) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_F9;
+		}
+		if (kb.F10) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_F10;
+		}
+		if (kb.F11) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_F11;
+		}
+		if (kb.F12) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_F12;
+		}
+
+		//letters
+		if (kb.A) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X41;
+			CheckModifiers(kb);
+		}
+
+		if (kb.B) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X42;
+			CheckModifiers(kb);
+		}
+		if (kb.C) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X43;
+			CheckModifiers(kb);
+		}
+		if (kb.D) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X44;
+			CheckModifiers(kb);
+		}
+
+		if (kb.E) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X45;
+			CheckModifiers(kb);
+		}
+		if (kb.F) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X46;
+			CheckModifiers(kb);
+		}
+		if (kb.G) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X47;
+			CheckModifiers(kb);
+		}
+
+		if (kb.H) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X48;
+			CheckModifiers(kb);
+		}
+		if (kb.I) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X49;
+			CheckModifiers(kb);
+		}
+		if (kb.J) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X4A;
+			CheckModifiers(kb);
+		}
+
+		if (kb.K) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X4B;
+			CheckModifiers(kb);
+		}
+		if (kb.L) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X4C;
+			CheckModifiers(kb);
+		}
+		if (kb.M) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X4D;
+			CheckModifiers(kb);
+		}
+
+		if (kb.N) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X4E;
+			CheckModifiers(kb);
+		}
+		if (kb.O) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X4F;
+			CheckModifiers(kb);
+		}
+		if (kb.P) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X50;
+			CheckModifiers(kb);
+		}
+
+		if (kb.Q) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X51;
+			CheckModifiers(kb);
+		}
+		if (kb.R) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X52;
+			CheckModifiers(kb);
+		}
+		if (kb.S) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X53;
+			CheckModifiers(kb);
+		}
+		if (kb.T) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X54;
+			CheckModifiers(kb);
+		}
+		if (kb.U) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X55;
+		}
+		if (kb.V) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X56;
+			CheckModifiers(kb);
+		}
+		if (kb.W) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X57;
+			CheckModifiers(kb);
+		}
+		if (kb.X) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X58;
+			CheckModifiers(kb);
+		}
+		if (kb.Y) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X59;
+			CheckModifiers(kb);
+		}
+		if (kb.Z) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = 0X5A;
+			CheckModifiers(kb);
+		}
+		if (kb.PageUp) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_PRIOR;
+		}
+		if (kb.PageDown) {
+			xboxKeyboard->pressed = true;
+			xboxKeyboard->keyCode = VK_NEXT;
+		}
+
+
+		moonlightClient->SendKeyBoardEvent(xboxKeyboard);
+	}
 }
 
 void moonlight_xbox_dxMain::CheckModifiers(Keyboard::State kb) {
